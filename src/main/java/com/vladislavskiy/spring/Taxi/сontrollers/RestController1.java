@@ -1,22 +1,18 @@
-package com.vladislavskiy.spring.Taxi.Controllers;
+package com.vladislavskiy.spring.Taxi.сontrollers;
 
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
-import com.vladislavskiy.spring.Taxi.services.UserService;
 import com.vladislavskiy.spring.Taxi.services.UserServiceImpl;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class RestController1 {
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
     @GetMapping("/allusers")
     public List<User> getAllUsers()
     {

@@ -1,6 +1,5 @@
 package com.vladislavskiy.spring.Taxi;
 
-import com.vladislavskiy.spring.Taxi.services.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
