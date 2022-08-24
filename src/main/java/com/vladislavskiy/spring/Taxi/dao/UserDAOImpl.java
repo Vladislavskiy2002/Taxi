@@ -1,6 +1,7 @@
 package com.vladislavskiy.spring.Taxi.dao;
 
 
+import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
 import org.hibernate.Session;
 
@@ -12,7 +13,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl implements UserDAOImpl{
+public class UserDAOImpl implements UserDAO{
     @Autowired
     EntityManager entityManager;
 
@@ -41,6 +42,12 @@ public class UserDAOImpl implements UserDAOImpl{
          Query query = session.createQuery("select id from trip_information where user_id =: current_id", Integer.class);
         query.setParameter("current_id", id);
         System.out.println(query.getResultList());
-        return null;
+        return query.getResultList();
+    }
+    @Override
+    public void addOrUpdateTrip(TripHistory tripHistory)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        session.save(tripHistory);
     }
     }

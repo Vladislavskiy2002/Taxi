@@ -1,7 +1,9 @@
 package com.vladislavskiy.spring.Taxi.services;
 
 import com.vladislavskiy.spring.Taxi.dao.UserDAO;
+import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,5 +44,12 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllTripHistoryFromCurrentUser(int id)
     {
         return userDAO.getAllTripHistoryFromCurrentUser(id);
+    }
+
+    @Transactional
+    @Override
+    public void addOrUpdateTrip(TripHistory tripHistory)
+    {
+        userDAO.addOrUpdateTrip(tripHistory);
     }
 }

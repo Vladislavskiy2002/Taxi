@@ -31,14 +31,13 @@ public class RestController1 {
         tripHistory.setUser(user);
         userService.addOrUpdateUser(user);
     }
-    @PostMapping("/add/addMessageToUser/{id}")
+    @PostMapping("/add/MessageToUser/{id}")
     public void addMessageToUser(@PathVariable int id,@RequestBody String message)
     {
+        System.out.println(message);
         User user = userService.getUser(id);
         TripHistory tripHistory = new TripHistory(message);
-        user.addTripForUser(tripHistory);
-        tripHistory.setUser(user);
-        userService.addOrUpdateUser(user);
-        System.out.println(message);
+        tripHistory.addUserToTripHistory(user);
+        userService.addOrUpdateTrip(tripHistory);
     }
 }
