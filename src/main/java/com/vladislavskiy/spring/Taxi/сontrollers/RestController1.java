@@ -1,7 +1,10 @@
 package com.vladislavskiy.spring.Taxi.сontrollers;
 
+import com.vladislavskiy.spring.Taxi.dao.UserDAO;
+import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
+import com.vladislavskiy.spring.Taxi.services.UserService;
 import com.vladislavskiy.spring.Taxi.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +42,10 @@ public class RestController1 {
         TripHistory tripHistory = new TripHistory(message);
         tripHistory.addUserToTripHistory(user);
         userService.addOrUpdateTrip(tripHistory);
+    }
+    @PostMapping("/add/order")
+    public void createOrder(@RequestBody Order order)
+    {
+        userService.addOrUpdateOrder(order);
     }
 }

@@ -1,6 +1,7 @@
 package com.vladislavskiy.spring.Taxi.services;
 
 import com.vladislavskiy.spring.Taxi.dao.UserDAO;
+import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
 import org.hibernate.Session;
@@ -51,5 +52,11 @@ public class UserServiceImpl implements UserService {
     public void addOrUpdateTrip(TripHistory tripHistory)
     {
         userDAO.addOrUpdateTrip(tripHistory);
+    }
+    @Transactional
+    @Override
+    public void addOrUpdateOrder(Order order)
+    {
+        userDAO.addOrUpdateOrder(order);
     }
 }

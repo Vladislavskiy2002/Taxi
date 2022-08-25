@@ -1,6 +1,7 @@
 package com.vladislavskiy.spring.Taxi.dao;
 
 
+import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
 import org.hibernate.Session;
@@ -49,5 +50,11 @@ public class UserDAOImpl implements UserDAO{
     {
         Session session = entityManager.unwrap(Session.class);
         session.save(tripHistory);
+    }
+    @Override
+    public void addOrUpdateOrder(Order order)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        session.save(order);
     }
     }
