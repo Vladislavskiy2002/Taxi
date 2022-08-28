@@ -55,6 +55,14 @@ public class User {
         this.surname = surname;
     }
 
+    public List<TripHistory> getTripHistory() {
+        return tripHistory;
+    }
+
+    public void setTripHistory(List<TripHistory> tripHistory) {
+        this.tripHistory = tripHistory;
+    }
+
     public User(String name, String surname, TripHistory tripHistory) {
         this.name = name;
         this.surname = surname;
@@ -64,5 +72,15 @@ public class User {
     public User(TripHistory tripHistory) {
         this.tripHistory = new ArrayList<>();
         this.addTripForUser(tripHistory);;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", tripHistory=" + tripHistory +
+                '}';
     }
 }

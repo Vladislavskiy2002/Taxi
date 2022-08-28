@@ -59,4 +59,10 @@ public class UserServiceImpl implements UserService {
     {
         userDAO.addOrUpdateOrder(order);
     }
+    @Transactional
+    @Override
+    public Order getOrderByUserId(int id)
+    {
+        return userDAO.getOrderByUserId(id);
+    }
 }

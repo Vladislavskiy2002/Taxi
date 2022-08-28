@@ -8,7 +8,7 @@ public class TripHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "trip_info")
+        @Column(name = "trip_info")
     private String infoAboutTrip;
 
 
@@ -53,5 +53,14 @@ public class TripHistory {
 
     public void setInfoAboutTrip(String infoAboutTrip) {
         this.infoAboutTrip = infoAboutTrip;
+    }
+
+    @Override
+    public String toString() {
+        return "TripHistory{" +
+                "id=" + id +
+                ", infoAboutTrip='" + infoAboutTrip + '\'' +
+                ", user=" + user +
+                '}';
     }
 }

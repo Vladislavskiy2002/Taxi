@@ -57,4 +57,10 @@ public class UserDAOImpl implements UserDAO{
         Session session = entityManager.unwrap(Session.class);
         session.save(order);
     }
+    @Override
+    public Order getOrderByUserId(int id)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        return session.get(Order.class, id);
     }
+}

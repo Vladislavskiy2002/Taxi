@@ -14,4 +14,5 @@ public interface UserService {
     public List<User> getAllTripHistoryFromCurrentUser(int id);
     public void addOrUpdateTrip(TripHistory tripHistory);
     void addOrUpdateOrder(Order order);
+    public Order getOrderByUserId(int id);
 }
