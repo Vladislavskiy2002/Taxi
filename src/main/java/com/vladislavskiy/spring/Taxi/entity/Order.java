@@ -35,17 +35,21 @@ public class Order {
         long priceTripForOnekmPrime = 6;
         long distance;
         long tempCount = 0;
-        if(comfort_level == "business" || comfort_level == "prime")
+        if(comfort_level.equals("business") || comfort_level.equals("prime") || comfort_level.equals("PRIME"))
             tempCount = priceTripForOnekmPrime;
-        else if(comfort_level == "standart" || comfort_level == "Standart")
+        else if(comfort_level.equals("standart") || comfort_level.equals("Standart"))
             tempCount = priceTripForOneKmStandart;
-        else if(comfort_level == "low" || comfort_level == "Low")
+        else if(comfort_level.equals("low") || comfort_level.equals("Low"))
             tempCount = priceTripForOnekmPrime;
 
         distance = (long)((Math.pow(address.getXb() - address.getXa(),2) + Math.pow((address.getYb()) - address.getYa(),2)));
         return tempCount * distance;
     }
-
+    public long countTimeForTrip()
+    {
+        long distance = (long)((Math.pow(address.getXb() - address.getXa(),2) + Math.pow((address.getYb()) - address.getYa(),2)));
+        return distance/50;
+    }
     public int getId() {
         return id;
     }

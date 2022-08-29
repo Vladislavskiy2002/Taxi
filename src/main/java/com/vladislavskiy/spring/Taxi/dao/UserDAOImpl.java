@@ -6,11 +6,11 @@ import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
 import org.hibernate.Session;
 
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -62,5 +62,36 @@ public class UserDAOImpl implements UserDAO{
     {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Order.class, id);
+    }
+    public boolean isCurrentUsersOrderNull(Order order)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        Query query = session.createQuery("select id from orders where user_id =: current_id", Integer.class);
+        int id = order.getUser().getId();
+        query.setParameter("current_id", id);
+        if(query.getResultList().isEmpty())
+        {
+            System.out.println("true");
+            System.out.println(query.getResultList());
+            return true;
+        }
+        else
+        {
+            System.out.println("false");
+            System.out.println(query.getResultList());
+            return false;
+        }
+    }
+    public void completeUsersOrder(Order order)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        order.setOrder_status(false);
+        TripHistory tripHistory = new TripHistory(order.getComfort_level());
+        tripHistory.addUserToTripHistory(order.getUser());
+        addOrUpdateTrip(tripHistory);
+        Query<Order> query = session.createQuery("delete from orders where user_id =: current_id");
+        int id = order.getUser().getId();
+        query.setParameter("current_id", id);
+        query.executeUpdate();
     }
 }

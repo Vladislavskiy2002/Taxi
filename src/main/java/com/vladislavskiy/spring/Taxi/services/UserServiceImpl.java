@@ -65,4 +65,16 @@ public class UserServiceImpl implements UserService {
     {
         return userDAO.getOrderByUserId(id);
     }
+    @Transactional
+    @Override
+    public boolean isCurrentUsersOrderNull(Order order)
+    {
+        return userDAO.isCurrentUsersOrderNull(order);
+    }
+    @Transactional
+    @Override
+    public void completeUsersOrder(Order order)
+    {
+        userDAO.completeUsersOrder(order);
+    }
 }

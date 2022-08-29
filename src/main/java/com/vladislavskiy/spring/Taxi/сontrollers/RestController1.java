@@ -8,10 +8,14 @@ import com.vladislavskiy.spring.Taxi.entity.Address;
 import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
+import com.vladislavskiy.spring.Taxi.exception_handling.TooMuchOrdersForCurrentUserException;
+import com.vladislavskiy.spring.Taxi.exception_handling.UserIncorrectData;
 import com.vladislavskiy.spring.Taxi.services.UserService;
 import com.vladislavskiy.spring.Taxi.services.UserServiceImpl;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,36 +52,40 @@ public class RestController1 {
 
     @PostMapping("/add/order")
     public void createOrder(@RequestBody Order order) {
-        System.out.println(order);
-
-
-        Order order2 = new Order();
-
-
-
-        Address address = new Address();
-        order2.setAddress(address);
-        order2.getAddress().setXa(1l);
-        order2.getAddress().setXb(2l);
-        order2.getAddress().setYa(3l);
-        order2.getAddress().setYb(4l);
-        System.out.println(order2.getAddress());
-
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        try {
-            String json = ow.writeValueAsString(order2);
-            System.out.println(json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        if(!userService.isCurrentUsersOrderNull(order))
+        {
+            throw new TooMuchOrdersForCurrentUserException("Too Much Orders For Current User Exception");
         }
-
+        System.out.println(order);
         System.out.println(order.getUser().getTripHistory());
         userService.addOrUpdateOrder(order);
+    }
+    @ExceptionHandler
+    public ResponseEntity<UserIncorrectData>hendlerException(TooMuchOrdersForCurrentUserException exception)
+    {
+        UserIncorrectData data = new UserIncorrectData();
+        data.setInfo(exception.getMessage());
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/get/infoOfUsersTrip/{id}")
     public void getInfoOfUsersTrip(@PathVariable int id) {
         Order order = userService.getOrderByUserId(id);
 
+    }
+    @GetMapping("/get/infoAboutOrder/{id}")
+    public String getInfoAboutOrder(@PathVariable int id) {
+        Order order = userService.getOrderByUserId(id);
+        Long price = order.countPriceForTrip();
+        String str = "Order's cost : " + price.toString() + "\n";
+        Long timeInHours = order.countTimeForTrip();
+        str += "Order's Time : " + timeInHours.toString() + "\n";
+        return str;
+    }
+    @DeleteMapping("/get/completeUsersOrder/{id}")
+    public void completeUsersOrder(@PathVariable int id) {
+        Order order = userService.getOrderByUserId(id);
+        System.out.println(order);
+        userService.completeUsersOrder(order);
     }
 }
