@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
-@Entity(name = "orders")
+@Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,40 +17,36 @@ public class Order {
     private User user;
 
     @Column(name = "order_status")
-    private boolean order_status;
+    private boolean orderStatus;
+    //Todo: camelcase +
 
     @OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "address_id")
     private Address address;
-
+//TODO: коммент +
     @Column(name = "comfort_level")
-    private String comfort_level;
+    private String comfortLevel;
+    //Todo: camelcase +
 
     public Order() {
     }
+//    public boolean isOrderHasCorrectComfortLevel()
+//    {
+//        long priceTripForOneKmLow = 2;
+//        long priceTripForOneKmStandart = 3;
+//        long priceTripForOnekmPrime = 6;
+//        long distance;
+//        long tempCount = 0;
+//        if(comfort_level.equals("business") || comfort_level.equals("prime") || comfort_level.equals("PRIME"))
+//            tempCount = priceTripForOnekmPrime;
+//        else if(comfort_level.equals("standart") || comfort_level.equals("Standart"))
+//            tempCount = priceTripForOneKmStandart;
+//        else if(comfort_level.equals("low") || comfort_level.equals("Low"))
+//            tempCount = priceTripForOnekmPrime;
+//
+//        distance = (long)((Math.pow(address.getXb() - address.getXa(),2) + Math.pow((address.getYb()) - address.getYa(),2)));
+//        return tempCount * distance;
+//    }
 
-    public long countPriceForTrip()
-    {
-        long priceTripForOneKmLow = 2;
-        long priceTripForOneKmStandart = 3;
-        long priceTripForOnekmPrime = 6;
-        long distance;
-        long tempCount = 0;
-        if(comfort_level.equals("business") || comfort_level.equals("prime") || comfort_level.equals("PRIME"))
-            tempCount = priceTripForOnekmPrime;
-        else if(comfort_level.equals("standart") || comfort_level.equals("Standart"))
-            tempCount = priceTripForOneKmStandart;
-        else if(comfort_level.equals("low") || comfort_level.equals("Low"))
-            tempCount = priceTripForOnekmPrime;
-
-        distance = (long)((Math.pow(address.getXb() - address.getXa(),2) + Math.pow((address.getYb()) - address.getYa(),2)));
-        return tempCount * distance;
-    }
-    public long countTimeForTrip()
-    {
-        long distance = (long)((Math.pow(address.getXb() - address.getXa(),2) + Math.pow((address.getYb()) - address.getYa(),2)));
-        return distance/50;
-    }
     public int getId() {
         return id;
     }
@@ -67,19 +64,19 @@ public class Order {
     }
 
     public boolean isOrder_status() {
-        return order_status;
+        return orderStatus;
     }
 
     public void setOrder_status(boolean order_status) {
-        this.order_status = order_status;
+        this.orderStatus = order_status;
     }
 
     public boolean isStatus() {
-        return order_status;
+        return orderStatus;
     }
 
     public void setStatus(boolean status) {
-        this.order_status = status;
+        this.orderStatus = status;
     }
 
     public Address getAddress() {
@@ -91,11 +88,11 @@ public class Order {
     }
 
     public String getComfort_level() {
-        return comfort_level;
+        return comfortLevel;
     }
 
     public void setComfort_level(String comfort_level) {
-        this.comfort_level = comfort_level;
+        this.comfortLevel = comfort_level;
     }
 
     @Override
@@ -103,9 +100,9 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", user=" + user +
-                ", order_status=" + order_status +
+                ", orderStatus=" + orderStatus +
                 ", address=" + address +
-                ", comfort_level='" + comfort_level + '\'' +
+                ", comfortLevel='" + comfortLevel + '\'' +
                 '}';
     }
 }

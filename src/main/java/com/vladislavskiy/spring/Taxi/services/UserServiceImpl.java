@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
@@ -24,57 +25,95 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    //TODO: винести више Transactional +
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
     @Override
-    @Transactional
     public User getUser(int id)
     {
         return userDAO.getUser(id);
     }
     @Override
-    @Transactional
     public void addOrUpdateUser(User user)
     {
         userDAO.addOrUpdateUser(user);
     }
     @Override
-    @Transactional
     public List<User> getAllTripHistoryFromCurrentUser(int id)
     {
         return userDAO.getAllTripHistoryFromCurrentUser(id);
     }
-
-    @Transactional
     @Override
-    public void addOrUpdateTrip(TripHistory tripHistory)
+    public boolean addOrUpdateTrip(TripHistory tripHistory)
     {
-        userDAO.addOrUpdateTrip(tripHistory);
+        return userDAO.addOrUpdateTrip(tripHistory);
     }
-    @Transactional
     @Override
-    public void addOrUpdateOrder(Order order)
+    public boolean addOrUpdateOrder(Order order)
     {
-        userDAO.addOrUpdateOrder(order);
+        return userDAO.addOrUpdateOrder(order);
     }
-    @Transactional
     @Override
     public Order getOrderByUserId(int id)
     {
         return userDAO.getOrderByUserId(id);
     }
-    @Transactional
     @Override
     public boolean isCurrentUsersOrderNull(Order order)
     {
         return userDAO.isCurrentUsersOrderNull(order);
     }
-    @Transactional
     @Override
     public void completeUsersOrder(Order order)
     {
         userDAO.completeUsersOrder(order);
+    }
+    @Override
+    public void deleteOrder(Order order){userDAO.deleteOrder(order);}
+    @Override
+    public Order getOrderById(int id)
+    {
+        return userDAO.getOrderById(id);
+    }
+    public long countPriceForTrip(Order order)
+    {
+        String cheapStr = "CHEAP";
+        String standartStr = "STANDART";
+        String primeStr = "PRIME";
+
+        long priceTripForOneKmLow = 2;
+        //TODO: remove unused field +
+        long priceTripForOneKmStandart = 3;
+        long priceTripForOnekmPrime = 6;
+        long distance;
+        long tempCount = 0;
+        if(order.getComfort_level().equals(cheapStr))
+            tempCount = priceTripForOnekmPrime;
+        else if(order.getComfort_level().equals(standartStr))
+            tempCount = priceTripForOneKmStandart;
+        else if(order.getComfort_level().equals(primeStr))
+            tempCount = priceTripForOneKmLow;
+
+        distance = (long)((Math.pow(order.getAddress().getXb() - order.getAddress().getXa(),2) + Math.pow((order.getAddress().getYb()) - order.getAddress().getYa(),2)));
+        return tempCount * distance;
+    }
+    //TODO: перенести в сервіс +
+    // TODO: позбутися мейджік намбер +
+    //  TODO: і позбутися стрінг -
+    public long countTimeForTrip(Order order)
+    {
+        long distance = (long)((Math.pow(order.getAddress().getXb() -order.getAddress().getXa(),2) + Math.pow((order.getAddress().getYb()) - order.getAddress().getYa(),2)));
+        return distance/50;
+    }
+    @Override
+    public String ordersInfo(Order order)
+    {
+        long price = countPriceForTrip(order);
+        String str = String.format("Order's cost : %d\n", price);
+        //TODO gfmtrl +
+        long timeInHours = countTimeForTrip(order);
+        str += "Order's Time : " + Long.toString(timeInHours) + "\n";
+        return str;
     }
 }

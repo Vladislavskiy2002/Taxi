@@ -1,6 +1,7 @@
-package com.vladislavskiy.spring.Taxi.dao;
+package com.vladislavskiy.spring.Taxi.dao.impl;
 
 
+import com.vladislavskiy.spring.Taxi.dao.UserDAO;
 import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
@@ -12,16 +13,21 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+
 
 @Repository
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
+
+    //TODO: модифікатор +
 
     @Override
     public List<User> getAllUsers() {
         Session session = entityManager.unwrap(Session.class);
-        List<User> userList = session.createQuery("from users", User.class).getResultList();
+        List<User> userList = session.createQuery("from User", User.class).getResultList();
         return userList;
     }
     @Override
@@ -40,25 +46,44 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getAllTripHistoryFromCurrentUser(int id)
     {
         Session session = entityManager.unwrap(Session.class);
-         Query query = session.createQuery("select id from trip_information where user_id =: current_id", Integer.class);
+         Query query = session.createQuery("select id from TripHistory where user_id =: current_id", Integer.class);
         query.setParameter("current_id", id);
-        System.out.println(query.getResultList());
+        //TODO : якщо неемає юзера треба 404 авератит
+        System.out.println();
+        //LOGGER.log(Level.INFO,query.getResultList());
+        //TODO : LOGGER
         return query.getResultList();
     }
     @Override
-    public void addOrUpdateTrip(TripHistory tripHistory)
+    public boolean addOrUpdateTrip(TripHistory tripHistory)
     {
         Session session = entityManager.unwrap(Session.class);
         session.save(tripHistory);
+        return true;
     }
+    //TODO : boolean +-
     @Override
-    public void addOrUpdateOrder(Order order)
+    public boolean addOrUpdateOrder(Order order)
     {
         Session session = entityManager.unwrap(Session.class);
         session.save(order);
+        //if(session.get(Order.class, order.getId()) == null)
+
+        return true;
     }
+    //TODO : boolean +-
     @Override
     public Order getOrderByUserId(int id)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        Query query = session.createQuery("select id from Order where user_id =: current_id", Integer.class);
+        query.setParameter("current_id", id);
+        id = (Integer)query.getSingleResult();
+        System.out.println(id);
+        Order order = session.get(Order.class, id);
+        return order;
+    }
+    public Order getOrderById(int id)
     {
         Session session = entityManager.unwrap(Session.class);
         return session.get(Order.class, id);
@@ -73,12 +98,15 @@ public class UserDAOImpl implements UserDAO{
         {
             System.out.println("true");
             System.out.println(query.getResultList());
+            //TODO : Logger
             return true;
         }
         else
         {
             System.out.println("false");
             System.out.println(query.getResultList());
+            //TODO : Logger
+
             return false;
         }
     }
@@ -87,10 +115,19 @@ public class UserDAOImpl implements UserDAO{
         Session session = entityManager.unwrap(Session.class);
         order.setOrder_status(false);
         TripHistory tripHistory = new TripHistory(order.getComfort_level());
-        tripHistory.addUserToTripHistory(order.getUser());
+        tripHistory.setUser(order.getUser());
         addOrUpdateTrip(tripHistory);
-        Query<Order> query = session.createQuery("delete from orders where user_id =: current_id");
+        Query<Order> query = session.createQuery("delete from Order where user_id =: current_id");
         int id = order.getUser().getId();
+        query.setParameter("current_id", id);
+        query.executeUpdate();
+    }
+    public void deleteOrder(Order order)
+    {
+        Session session = entityManager.unwrap(Session.class);
+        order.setOrder_status(false);
+        Query<Order> query = session.createQuery("delete from Order where id =: current_id");
+        int id = order.getId();
         query.setParameter("current_id", id);
         query.executeUpdate();
     }

@@ -11,11 +11,13 @@ public interface UserDAO {
     User getUser(int id);
     void addOrUpdateUser(User user);
     List<User> getAllTripHistoryFromCurrentUser(int id);
-    public void addOrUpdateTrip(TripHistory tripHistory);
-    public void addOrUpdateOrder(Order order);
+    public boolean addOrUpdateTrip(TripHistory tripHistory);
+    public boolean addOrUpdateOrder(Order order);
     public Order getOrderByUserId(int id);
     public boolean isCurrentUsersOrderNull(Order order);
     public void completeUsersOrder(Order order);
+    public void deleteOrder(Order order);
+    public Order getOrderById(int id);
 }
 
 

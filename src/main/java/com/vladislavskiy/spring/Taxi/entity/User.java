@@ -1,9 +1,12 @@
 package com.vladislavskiy.spring.Taxi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.*;
 
-@Entity(name = "users2")
+@Entity()
+@Table(name = "users2")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,14 +16,15 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<TripHistory> tripHistory;
+    private List<TripHistory> tripHistory = null;
 
     public void addTripForUser(TripHistory tripHistory)
     {
         this.tripHistory.add(tripHistory);
     }
-
+//TODO: Lombok почитати і убрати оце нахер
     public User() {
         tripHistory = new ArrayList<>();
     }
@@ -79,8 +83,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", tripHistory=" + tripHistory +
+                ", surname='" + surname + '\''+
                 '}';
     }
 }
