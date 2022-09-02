@@ -1,47 +1,23 @@
 package com.vladislavskiy.spring.Taxi.dao;
 
-
+import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
-import org.hibernate.Session;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 
-@Repository
-public class UserDAO implements UserDAOImpl{
-    @Autowired
-    EntityManager entityManager;
+public interface UserDAO {
+    List<User> getAllUsers();
+    User getUser(int id);
+    void addOrUpdateUser(User user);
+    List<TripHistory> getAllTripHistoryFromCurrentUser(int id);
+    public boolean addOrUpdateTrip(TripHistory tripHistory);
+    public boolean addOrUpdateOrder(Order order);
+    public Order getOrderByUserId(int id);
+    public boolean isCurrentUsersOrderNull(Order order);
+    public void completeUsersOrder(Order order);
+    public void deleteOrder(Order order);
+    public Order getOrderById(int id);
+}
 
-    @Override
-    public List<User> getAllUsers() {
-        Session session = entityManager.unwrap(Session.class);
-        List<User> userList = session.createQuery("from users", User.class).getResultList();
-        return userList;
-    }
-    @Override
-    public void addOrUpdateUser(User user)
-    {
-        Session session = entityManager.unwrap(Session.class);
-        session.saveOrUpdate(user);
-    }
-    @Override
-    public User getUser(int id)
-    {
-        Session session = entityManager.unwrap(Session.class);
-        return session.get(User.class, id);
-    }
-    @Override
-    public List<User> getAllTripHistoryFromCurrentUser(int id)
-    {
-        Session session = entityManager.unwrap(Session.class);
-         Query query = session.createQuery("select id from trip_information where user_id =: current_id", Integer.class);
-        query.setParameter("current_id", id);
-        System.out.println(query.getResultList());
-        return null;
-    }
-    }
+
