@@ -5,6 +5,7 @@ import com.vladislavskiy.spring.Taxi.dao.UserDAO;
 import com.vladislavskiy.spring.Taxi.entity.Order;
 import com.vladislavskiy.spring.Taxi.entity.TripHistory;
 import com.vladislavskiy.spring.Taxi.entity.User;
+import com.vladislavskiy.spring.Taxi.exception_handling.NotFoundUserByIdException;
 import org.hibernate.Session;
 
 import org.hibernate.query.Query;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -40,19 +42,26 @@ public class UserDAOImpl implements UserDAO {
     public User getUser(int id)
     {
         Session session = entityManager.unwrap(Session.class);
+        if(session.get(User.class, id) == null)
+            throw new NotFoundUserByIdException("Not Found User By Id : " + id);
         return session.get(User.class, id);
     }
     @Override
-    public List<User> getAllTripHistoryFromCurrentUser(int id)
+    public List<TripHistory> getAllTripHistoryFromCurrentUser(int id)
     {
         Session session = entityManager.unwrap(Session.class);
+        if(session.get(User.class, id) == null)
+            throw new NotFoundUserByIdException("Not Found User By Id : " + id);
          Query query = session.createQuery("select id from TripHistory where user_id =: current_id", Integer.class);
         query.setParameter("current_id", id);
-        //TODO : якщо неемає юзера треба 404 авератит
-        System.out.println();
-        //LOGGER.log(Level.INFO,query.getResultList());
-        //TODO : LOGGER
-        return query.getResultList();
+         List<TripHistory> tripList = new ArrayList<>();
+        List<Integer> tripIdList = query.getResultList();
+         for(Integer tempId : tripIdList)
+         {
+             tripList.add(session.get(TripHistory.class,tempId));
+         }
+        //TODO : якщо неемає юзера треба 404 авератит +
+        return tripList;
     }
     @Override
     public boolean addOrUpdateTrip(TripHistory tripHistory)
@@ -76,6 +85,8 @@ public class UserDAOImpl implements UserDAO {
     public Order getOrderByUserId(int id)
     {
         Session session = entityManager.unwrap(Session.class);
+        if(session.get(User.class, id) == null)
+            throw new NotFoundUserByIdException("Not Found User By Id : " + id);
         Query query = session.createQuery("select id from Order where user_id =: current_id", Integer.class);
         query.setParameter("current_id", id);
         id = (Integer)query.getSingleResult();
@@ -91,7 +102,7 @@ public class UserDAOImpl implements UserDAO {
     public boolean isCurrentUsersOrderNull(Order order)
     {
         Session session = entityManager.unwrap(Session.class);
-        Query query = session.createQuery("select id from orders where user_id =: current_id", Integer.class);
+        Query query = session.createQuery("select id from Order where user_id =: current_id", Integer.class);
         int id = order.getUser().getId();
         query.setParameter("current_id", id);
         if(query.getResultList().isEmpty())

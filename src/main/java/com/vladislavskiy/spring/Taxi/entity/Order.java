@@ -101,7 +101,7 @@ public class Order {
                 "id=" + id +
                 ", user=" + user +
                 ", orderStatus=" + orderStatus +
-                ", address=" + address +
+                ", address=" + address.getId() +
                 ", comfortLevel='" + comfortLevel + '\'' +
                 '}';
     }

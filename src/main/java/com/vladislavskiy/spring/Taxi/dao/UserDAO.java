@@ -10,7 +10,7 @@ public interface UserDAO {
     List<User> getAllUsers();
     User getUser(int id);
     void addOrUpdateUser(User user);
-    List<User> getAllTripHistoryFromCurrentUser(int id);
+    List<TripHistory> getAllTripHistoryFromCurrentUser(int id);
     public boolean addOrUpdateTrip(TripHistory tripHistory);
     public boolean addOrUpdateOrder(Order order);
     public Order getOrderByUserId(int id);

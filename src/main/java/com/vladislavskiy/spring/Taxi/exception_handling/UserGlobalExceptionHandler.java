@@ -21,4 +21,11 @@ public class UserGlobalExceptionHandler {
         data.setInfo(exception.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<UserIncorrectData> handlerException(NotFoundUserByIdException exception) {
+        UserIncorrectData data = new UserIncorrectData();
+        data.setInfo(exception.getMessage());
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+    }
 }

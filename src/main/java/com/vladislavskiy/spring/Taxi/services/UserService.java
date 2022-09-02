@@ -11,7 +11,7 @@ public interface UserService {
     List<User> getAllUsers();
     User getUser(int id);
     void addOrUpdateUser(User user);
-    public List<User> getAllTripHistoryFromCurrentUser(int id);
+    public List<TripHistory> getAllTripHistoryFromCurrentUser(int id);
     public boolean addOrUpdateTrip(TripHistory tripHistory);
     public boolean addOrUpdateOrder(Order order);
     public Order getOrderByUserId(int id);

@@ -29,7 +29,7 @@ public class RestController1 {
     }
 
     @GetMapping("/history/{id}")
-    public List<User> getAllTripHistoryFromCurrentUser(@PathVariable int id) {
+    public List<TripHistory> getAllTripHistoryFromCurrentUser(@PathVariable int id) {
         return userService.getAllTripHistoryFromCurrentUser(id);
     }
 
@@ -58,17 +58,10 @@ public class RestController1 {
         userService.addOrUpdateOrder(order);
     }
 
-    @GetMapping("/get/infoOfUsersTrip/{id}")
-    public void getInfoOfUsersTrip(@PathVariable int id) {
-        // return entity
-        // unused initiaaliztion
-        Order order = userService.getOrderByUserId(id);
-
-    }
-
     @GetMapping("/get/infoAboutOrder/{id}")
     public String getInfoAboutOrder(@PathVariable int id) {
-        Order order = userService.getOrderById(id);
+        Order order = userService.getOrderByUserId(id);
+
         //TODO : SERVIICE +
         return userService.ordersInfo(order);
     }

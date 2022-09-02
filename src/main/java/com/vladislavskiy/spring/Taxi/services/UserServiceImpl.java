@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
         userDAO.addOrUpdateUser(user);
     }
     @Override
-    public List<User> getAllTripHistoryFromCurrentUser(int id)
+    public List<TripHistory> getAllTripHistoryFromCurrentUser(int id)
     {
         return userDAO.getAllTripHistoryFromCurrentUser(id);
     }
